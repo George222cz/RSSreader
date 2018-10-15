@@ -44,10 +44,12 @@ public class MainFrame extends JFrame {
         buttonLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    textArea.setText(FileUtils.loadStringFromFile(textField.getText()));
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
+                if (FileUtils.isInputValid(textField.getText())){
+                    try {
+                        textArea.setText(FileUtils.loadStringFromFile(textField.getText()));
+                    } catch (IOException ex) {
+                        System.out.println(ex.getMessage());
+                    }
                 }
             }
         });
@@ -55,10 +57,12 @@ public class MainFrame extends JFrame {
         buttonSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    FileUtils.saveStringToFile(textField.getText(), textArea.getText().getBytes());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                if (FileUtils.isInputValid(textField.getText())) {
+                    try {
+                        FileUtils.saveStringToFile(textField.getText(), textArea.getText().getBytes());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
