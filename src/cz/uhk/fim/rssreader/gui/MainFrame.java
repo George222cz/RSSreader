@@ -1,8 +1,13 @@
 package cz.uhk.fim.rssreader.gui;
 
+import cz.uhk.fim.rssreader.model.RSSItem;
 import cz.uhk.fim.rssreader.utils.FileUtils;
+import cz.uhk.fim.rssreader.utils.RSSList;
+import cz.uhk.fim.rssreader.utils.RSSParser;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +21,7 @@ public class MainFrame extends JFrame {
 
     private JLabel lblErrorMessage;
     private JTextField textField;
+    private RSSList rssList;
 
     public MainFrame(){
         init();
@@ -70,11 +76,22 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (validateInput()) {
-                    try {
+                   /* try {
                         FileUtils.saveStringToFile(textField.getText(), textArea.getText().getBytes());
                         lblErrorMessage.setVisible(false);
                     } catch (IOException e1) {
                         showErrorMessage(IO_SAVE_TYPE);
+                        e1.printStackTrace();
+                    }*/
+
+                    try {
+                        rssList = new RSSParser().getParsedRSS(textArea.getText());
+                        textArea.setText("");
+                        for (RSSItem item : rssList.getAllItems()){
+                            textArea.append(String.format("%s - autor: %s%n",item.getTitle(),item.getAutor()));
+                        }
+
+                    } catch (IOException | ParserConfigurationException | SAXException e1) {
                         e1.printStackTrace();
                     }
                 }
