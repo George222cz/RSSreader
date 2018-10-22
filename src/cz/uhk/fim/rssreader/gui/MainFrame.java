@@ -10,6 +10,13 @@ import java.io.IOException;
 
 public class MainFrame extends JFrame {
 
+    private static final String VALIDATION_TYPE = "VALIDATION_TYPE";
+    private static final String IO_LOAD_TYPE = "IO_LOAD_TYPE";
+    private static final String IO_SAVE_TYPE = "IO_SAVE_TYPE";
+
+    private JLabel lblErrorMessage;
+    private JTextField textField;
+
     public MainFrame(){
         init();
     }
@@ -27,15 +34,18 @@ public class MainFrame extends JFrame {
 
         JButton buttonLoad = new JButton("Load");
 
-        JTextField textField = new JTextField();
+        textField = new JTextField();
         JButton buttonSave = new JButton("Save");
-/**
- * TODO: pridat listenery na load a save, napsat metodu boolean validateInput - je prazdny?, pridat JLabel lblError - bude cervenej - zobrazi se v pripade chyby
- *
- * */
+        lblErrorMessage = new JLabel();
+        lblErrorMessage.setForeground(Color.RED);
+        lblErrorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblErrorMessage.setVisible(false);
+
         panel.add(buttonLoad,BorderLayout.WEST);
         panel.add(textField,BorderLayout.CENTER);
         panel.add(buttonSave,BorderLayout.EAST);
+        panel.add(lblErrorMessage, BorderLayout.SOUTH);
+
         add(panel,BorderLayout.NORTH);
 
         JTextArea textArea = new JTextArea();
@@ -44,10 +54,12 @@ public class MainFrame extends JFrame {
         buttonLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (FileUtils.isInputValid(textField.getText())){
+                if (validateInput()){
                     try {
                         textArea.setText(FileUtils.loadStringFromFile(textField.getText()));
+                        lblErrorMessage.setVisible(false);
                     } catch (IOException ex) {
+                        showErrorMessage(IO_LOAD_TYPE);
                         System.out.println(ex.getMessage());
                     }
                 }
@@ -57,15 +69,46 @@ public class MainFrame extends JFrame {
         buttonSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (FileUtils.isInputValid(textField.getText())) {
+                if (validateInput()) {
                     try {
                         FileUtils.saveStringToFile(textField.getText(), textArea.getText().getBytes());
+                        lblErrorMessage.setVisible(false);
                     } catch (IOException e1) {
+                        showErrorMessage(IO_SAVE_TYPE);
                         e1.printStackTrace();
                     }
                 }
             }
         });
+    }
+
+    private void showErrorMessage(String type) {
+        String message;
+        switch(type){
+            case VALIDATION_TYPE:
+                message = "Zadávací pole nemůže být prázdné!";
+                break;
+            case IO_LOAD_TYPE:
+                message = "Chyba při načítání souboru!";
+                break;
+            case IO_SAVE_TYPE:
+                message = "Chyba při ukládání souboru!";
+                break;
+            default:
+                message = "Bůh ví, co se stalo";
+                break;
+        }
+        lblErrorMessage.setText(message);
+        lblErrorMessage.setVisible(true);
+    }
+
+    private boolean validateInput(){
+        lblErrorMessage.setVisible(false);
+        if(textField.getText().trim().isEmpty()) {
+            showErrorMessage(VALIDATION_TYPE);
+            return false;
+        }
+        return true;
     }
 
 

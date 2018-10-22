@@ -15,8 +15,4 @@ public class FileUtils {
         Path file = Paths.get(filepath);
         Files.write(file,data);
     }
-
-    public static boolean isInputValid(String filepath){
-        return !(filepath.equals(""));
-    }
 }
