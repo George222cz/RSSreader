@@ -6,7 +6,7 @@ public class RSSItem {
     private String link;
     private String description;
     private String pubDate;
-    private String autor;
+    private String author;
 
     public RSSItem() {
     }
@@ -32,7 +32,7 @@ public class RSSItem {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.replaceAll("\\p{C}", "");
     }
 
     public String getPubDate() {
@@ -43,11 +43,11 @@ public class RSSItem {
         this.pubDate = pubDate;
     }
 
-    public String getAutor() {
-        return autor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

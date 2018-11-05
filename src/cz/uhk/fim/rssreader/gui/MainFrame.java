@@ -54,19 +54,46 @@ public class MainFrame extends JFrame {
 
         add(panel,BorderLayout.NORTH);
 
-        JTextArea textArea = new JTextArea();
-        add(new JScrollPane(textArea),BorderLayout.CENTER);
+        //JTextArea textArea = new JTextArea();
+        JPanel content = new JPanel(new WrapLayout());
 
-        buttonLoad.addActionListener(new ActionListener() {
+        try {
+            rssList = new RSSParser().getParsedRSS("zive.xml");
+
+            for(RSSItem item : rssList.getAllItems()){
+                content.add(new CardView(item));
+            }
+        } catch (IOException | SAXException | ParserConfigurationException e1) {
+            showErrorMessage(IO_LOAD_TYPE);
+            System.out.println(e1.getMessage());
+        }
+        add(new JScrollPane(content),BorderLayout.CENTER);
+
+        //add(new JScrollPane(textArea),BorderLayout.CENTER);
+
+       /* buttonLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (validateInput()){
-                    try {
+                   /* try {
                         textArea.setText(FileUtils.loadStringFromFile(textField.getText()));
-                        lblErrorMessage.setVisible(false);
+
                     } catch (IOException ex) {
+
+                    }*/
+
+            /*        try {
+                        lblErrorMessage.setVisible(false);
+                        rssList = new RSSParser().getParsedRSS(textField.getText());
+                        textArea.setText("");
+                        for(RSSItem item : rssList.getAllItems()){
+                            textArea.append(String.format("%s - autor: %s%n", item.getTitle(), item.getAuthor()));
+                            System.out.println(item.getDescription());
+                            System.out.println("-");
+                        }
+                    } catch (IOException | SAXException | ParserConfigurationException e1) {
                         showErrorMessage(IO_LOAD_TYPE);
-                        System.out.println(ex.getMessage());
+                        System.out.println(e1.getMessage());
                     }
                 }
             }
@@ -84,19 +111,11 @@ public class MainFrame extends JFrame {
                         e1.printStackTrace();
                     }*/
 
-                    try {
-                        rssList = new RSSParser().getParsedRSS(textArea.getText());
-                        textArea.setText("");
-                        for (RSSItem item : rssList.getAllItems()){
-                            textArea.append(String.format("%s - autor: %s%n",item.getTitle(),item.getAutor()));
-                        }
 
-                    } catch (IOException | ParserConfigurationException | SAXException e1) {
-                        e1.printStackTrace();
-                    }
+/*
                 }
             }
-        });
+        });*/
     }
 
     private void showErrorMessage(String type) {

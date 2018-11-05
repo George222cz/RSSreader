@@ -12,7 +12,7 @@ public class ItemHandler extends DefaultHandler {
     private static final String LINK = "link";
     private static final String DESCRIPTION = "description";
     private static final String PUB_DATE = "pubDate";
-    private static final String AUTHOR = "author";
+    private static final String AUTHOR = "dc:creator";
 
     private RSSItem item;
     private RSSList rssList;
@@ -76,7 +76,7 @@ public class ItemHandler extends DefaultHandler {
             pubDate = false;
         }
         if(author){
-            item.setAutor(new String(ch,start,length));
+            item.setAuthor(new String(ch,start,length));
             author = false;
         }
     }
