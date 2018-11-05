@@ -1,7 +1,6 @@
 package cz.uhk.fim.rssreader.gui;
 
 import cz.uhk.fim.rssreader.model.RSSItem;
-import cz.uhk.fim.rssreader.utils.FileUtils;
 import cz.uhk.fim.rssreader.utils.RSSList;
 import cz.uhk.fim.rssreader.utils.RSSParser;
 import org.xml.sax.SAXException;
@@ -9,8 +8,6 @@ import org.xml.sax.SAXException;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class MainFrame extends JFrame {
