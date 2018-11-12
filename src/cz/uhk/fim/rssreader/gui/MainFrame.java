@@ -39,11 +39,18 @@ public class MainFrame extends JFrame {
 
     private void initContent(){
         JPanel panel = new JPanel(new BorderLayout());
-        JComboBox combo = new JComboBox();
+        JComboBox combo;
         lblErrorMessage = new JLabel();
         lblErrorMessage.setForeground(Color.RED);
         lblErrorMessage.setHorizontalAlignment(SwingConstants.CENTER);
         lblErrorMessage.setVisible(false);
+
+        try {
+            sources = FileUtils.loadSources();
+            combo = new JComboBox(sources.toArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         JButton btnAdd = new JButton("Add");
         JButton btnEdit = new JButton("Edit");
@@ -60,14 +67,7 @@ public class MainFrame extends JFrame {
 
         add(panel,BorderLayout.NORTH);
 
-        try {
-            sources = FileUtils.loadSources();
-            for(RSSSource source : sources){
-                combo.addItem(source.getName());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         btnAdd.addActionListener(new ActionListener() {
             @Override
