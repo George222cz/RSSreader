@@ -1,6 +1,8 @@
 package cz.uhk.fim.rssreader.gui;
 
 import cz.uhk.fim.rssreader.model.RSSItem;
+import cz.uhk.fim.rssreader.model.RSSSource;
+import cz.uhk.fim.rssreader.utils.FileUtils;
 import cz.uhk.fim.rssreader.utils.RSSList;
 import cz.uhk.fim.rssreader.utils.RSSParser;
 import org.xml.sax.SAXException;
@@ -8,7 +10,10 @@ import org.xml.sax.SAXException;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
 
 public class MainFrame extends JFrame {
 
@@ -17,7 +22,7 @@ public class MainFrame extends JFrame {
     private static final String IO_SAVE_TYPE = "IO_SAVE_TYPE";
 
     private JLabel lblErrorMessage;
-    private JTextField textField;
+    private List<RSSSource> sources;
     private RSSList rssList;
 
     public MainFrame(){
@@ -34,28 +39,60 @@ public class MainFrame extends JFrame {
 
     private void initContent(){
         JPanel panel = new JPanel(new BorderLayout());
-
-        JButton buttonLoad = new JButton("Load");
-
-        textField = new JTextField();
-        JButton buttonSave = new JButton("Save");
+        JComboBox combo = new JComboBox();
         lblErrorMessage = new JLabel();
         lblErrorMessage.setForeground(Color.RED);
         lblErrorMessage.setHorizontalAlignment(SwingConstants.CENTER);
         lblErrorMessage.setVisible(false);
 
-        panel.add(buttonLoad,BorderLayout.WEST);
-        panel.add(textField,BorderLayout.CENTER);
-        panel.add(buttonSave,BorderLayout.EAST);
+        JButton btnAdd = new JButton("Add");
+        JButton btnEdit = new JButton("Edit");
+        JButton btnDelete = new JButton("Delete");
+
+        JPanel btnPanel = new JPanel(new BorderLayout());
+        btnPanel.add(btnAdd,BorderLayout.WEST);
+        btnPanel.add(btnEdit,BorderLayout.CENTER);
+        btnPanel.add(btnDelete,BorderLayout.EAST);
+
+        panel.add(combo,BorderLayout.NORTH);
+        panel.add(btnPanel,BorderLayout.CENTER);
         panel.add(lblErrorMessage, BorderLayout.SOUTH);
 
         add(panel,BorderLayout.NORTH);
 
-        //JTextArea textArea = new JTextArea();
-        JPanel content = new JPanel(new WrapLayout());
-
         try {
-            rssList = new RSSParser().getParsedRSS("zive.xml");
+            sources = FileUtils.loadSources();
+            for(RSSSource source : sources){
+                combo.addItem(source.getName());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        btnAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SourceDialog(sources,-1);
+            }
+        });
+
+        btnEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SourceDialog(sources,combo.getSelectedIndex());
+            }
+        });
+
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sources.remove(combo.getSelectedIndex());
+            }
+        });
+
+        JPanel content = new JPanel(new WrapLayout());
+        try {
+            rssList = new RSSParser().getParsedRSS("https://www.zive.cz/rss/sc-47/");
 
             for(RSSItem item : rssList.getAllItems()){
                 content.add(new CardView(item));
@@ -65,6 +102,29 @@ public class MainFrame extends JFrame {
             System.out.println(e1.getMessage());
         }
         add(new JScrollPane(content),BorderLayout.CENTER);
+/*
+        buttonSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<RSSSource> sources = new ArrayList<>();
+
+            }
+        });
+
+        buttonLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    List<RSSSource> sources = FileUtils.loadSources();
+                    for (RSSSource source :sources){
+                        System.out.println(source.getName()+"-"+source.getSource());
+                    }
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });*/
 
         //add(new JScrollPane(textArea),BorderLayout.CENTER);
 
@@ -134,7 +194,7 @@ public class MainFrame extends JFrame {
         lblErrorMessage.setText(message);
         lblErrorMessage.setVisible(true);
     }
-
+/*
     private boolean validateInput(){
         lblErrorMessage.setVisible(false);
         if(textField.getText().trim().isEmpty()) {
@@ -143,6 +203,6 @@ public class MainFrame extends JFrame {
         }
         return true;
     }
-
+*/
 
 }
