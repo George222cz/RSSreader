@@ -8,12 +8,17 @@ import cz.uhk.fim.rssreader.utils.RSSParser;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainFrame extends JFrame {
 
@@ -39,7 +44,7 @@ public class MainFrame extends JFrame {
 
     private void initContent(){
         JPanel panel = new JPanel(new BorderLayout());
-        JComboBox combo;
+        JComboBox combo = new JComboBox();
         lblErrorMessage = new JLabel();
         lblErrorMessage.setForeground(Color.RED);
         lblErrorMessage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -47,7 +52,8 @@ public class MainFrame extends JFrame {
 
         try {
             sources = FileUtils.loadSources();
-            combo = new JComboBox(sources.toArray());
+            combo.setModel(new DefaultComboBoxModel(sources.stream().map(RSSSource::getName).toArray()));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,7 +73,38 @@ public class MainFrame extends JFrame {
 
         add(panel,BorderLayout.NORTH);
 
+        JPanel content = new JPanel(new WrapLayout());
 
+        combo.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                combo.setModel(new DefaultComboBoxModel(sources.stream().map(RSSSource::getName).toArray()));
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {}
+
+        });
+
+        combo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    rssList = new RSSParser().getParsedRSS(sources.get(combo.getSelectedIndex()).getSource());
+                    content.removeAll();
+                    for (RSSItem item : rssList.getAllItems()) {
+                        content.add(new CardView(item));
+                    }
+                    content.revalidate();
+                    content.repaint();
+                } catch (IOException | ParserConfigurationException | SAXException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
 
         btnAdd.addActionListener(new ActionListener() {
             @Override
@@ -87,10 +124,12 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 sources.remove(combo.getSelectedIndex());
+                FileUtils.saveSources(sources);
+                combo.setSelectedIndex(0);
             }
         });
 
-        JPanel content = new JPanel(new WrapLayout());
+
         try {
             rssList = new RSSParser().getParsedRSS("https://www.zive.cz/rss/sc-47/");
 

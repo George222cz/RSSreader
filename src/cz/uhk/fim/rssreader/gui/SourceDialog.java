@@ -73,7 +73,7 @@ public class SourceDialog extends JFrame {
                     sources.add(new RSSSource(nazevTF.getText(), linkTF.getText()));
                 }else {
                     sources.get(index).setName(nazevTF.getText());
-                    sources.get(index).setSource(linkLabel.getText());
+                    sources.get(index).setSource(linkTF.getText());
                 }
                 FileUtils.saveSources(sources);
                 dispose();
@@ -87,6 +87,8 @@ public class SourceDialog extends JFrame {
         }
 
     }
+
+
 
 
 }
