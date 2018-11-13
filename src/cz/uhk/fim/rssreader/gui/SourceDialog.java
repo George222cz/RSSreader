@@ -13,8 +13,6 @@ import java.util.List;
 
 public class SourceDialog extends JFrame {
 
-    private static final int COMPONENT_WIDTH = 360;
-
     List<RSSSource> sources;
 
     public SourceDialog(List<RSSSource> sources, int index)  {
@@ -69,14 +67,18 @@ public class SourceDialog extends JFrame {
         btnOK.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(index == -1) {
-                    sources.add(new RSSSource(nazevTF.getText(), linkTF.getText()));
-                }else {
-                    sources.get(index).setName(nazevTF.getText());
-                    sources.get(index).setSource(linkTF.getText());
+                String name = nazevTF.getText().replaceAll(";","");
+                String link = linkTF.getText().replaceAll(";","");
+                if(validateInput(name) && validateInput(link)) {
+                    if (index == -1) {
+                        sources.add(new RSSSource(name, link));
+                    } else {
+                        sources.get(index).setName(name);
+                        sources.get(index).setSource(link);
+                    }
+                    FileUtils.saveSources(sources);
+                    dispose();
                 }
-                FileUtils.saveSources(sources);
-                dispose();
             }
         });
 
@@ -88,7 +90,8 @@ public class SourceDialog extends JFrame {
 
     }
 
-
-
+    private boolean validateInput(String input){
+        return !input.trim().isEmpty();
+    }
 
 }

@@ -14,11 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainFrame extends JFrame {
 
@@ -129,89 +126,19 @@ public class MainFrame extends JFrame {
             }
         });
 
-
         try {
-            rssList = new RSSParser().getParsedRSS("https://www.zive.cz/rss/sc-47/");
-
-            for(RSSItem item : rssList.getAllItems()){
-                content.add(new CardView(item));
+            if(sources.size()>0) {
+                rssList = new RSSParser().getParsedRSS(sources.get(0).getSource());
+                for (RSSItem item : rssList.getAllItems()) {
+                    content.add(new CardView(item));
+                }
             }
         } catch (IOException | SAXException | ParserConfigurationException e1) {
             showErrorMessage(IO_LOAD_TYPE);
             System.out.println(e1.getMessage());
         }
+
         add(new JScrollPane(content),BorderLayout.CENTER);
-/*
-        buttonSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                List<RSSSource> sources = new ArrayList<>();
-
-            }
-        });
-
-        buttonLoad.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    List<RSSSource> sources = FileUtils.loadSources();
-                    for (RSSSource source :sources){
-                        System.out.println(source.getName()+"-"+source.getSource());
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-            }
-        });*/
-
-        //add(new JScrollPane(textArea),BorderLayout.CENTER);
-
-       /* buttonLoad.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (validateInput()){
-                   /* try {
-                        textArea.setText(FileUtils.loadStringFromFile(textField.getText()));
-
-                    } catch (IOException ex) {
-
-                    }*/
-
-            /*        try {
-                        lblErrorMessage.setVisible(false);
-                        rssList = new RSSParser().getParsedRSS(textField.getText());
-                        textArea.setText("");
-                        for(RSSItem item : rssList.getAllItems()){
-                            textArea.append(String.format("%s - autor: %s%n", item.getTitle(), item.getAuthor()));
-                            System.out.println(item.getDescription());
-                            System.out.println("-");
-                        }
-                    } catch (IOException | SAXException | ParserConfigurationException e1) {
-                        showErrorMessage(IO_LOAD_TYPE);
-                        System.out.println(e1.getMessage());
-                    }
-                }
-            }
-        });
-
-        buttonSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (validateInput()) {
-                   /* try {
-                        FileUtils.saveStringToFile(textField.getText(), textArea.getText().getBytes());
-                        lblErrorMessage.setVisible(false);
-                    } catch (IOException e1) {
-                        showErrorMessage(IO_SAVE_TYPE);
-                        e1.printStackTrace();
-                    }*/
-
-
-/*
-                }
-            }
-        });*/
     }
 
     private void showErrorMessage(String type) {
