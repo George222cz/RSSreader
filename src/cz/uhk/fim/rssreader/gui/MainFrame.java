@@ -12,8 +12,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +25,7 @@ public class MainFrame extends JFrame {
     private JLabel lblErrorMessage;
     private List<RSSSource> sources;
     private RSSList rssList;
+    private SourceDialog sourceDialog = new SourceDialog();
 
     public MainFrame(){
         init();
@@ -58,6 +58,8 @@ public class MainFrame extends JFrame {
         JButton btnAdd = new JButton("Add");
         JButton btnEdit = new JButton("Edit");
         JButton btnDelete = new JButton("Delete");
+        btnAdd.setPreferredSize(new Dimension(250,1));
+        btnDelete.setPreferredSize(new Dimension(250,1));
 
         JPanel btnPanel = new JPanel(new BorderLayout());
         btnPanel.add(btnAdd,BorderLayout.WEST);
@@ -97,7 +99,9 @@ public class MainFrame extends JFrame {
                     }
                     content.revalidate();
                     content.repaint();
+                    lblErrorMessage.setVisible(false);
                 } catch (IOException | ParserConfigurationException | SAXException e1) {
+                    showErrorMessage(IO_LOAD_TYPE);
                     e1.printStackTrace();
                 }
             }
@@ -106,14 +110,14 @@ public class MainFrame extends JFrame {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SourceDialog(sources,-1);
+                if (!sourceDialog.isVisible()){ sourceDialog = new SourceDialog(sources, -1);}
             }
         });
 
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SourceDialog(sources,combo.getSelectedIndex());
+                if (!sourceDialog.isVisible()){ sourceDialog = new SourceDialog(sources,combo.getSelectedIndex());}
             }
         });
 

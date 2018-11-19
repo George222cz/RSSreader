@@ -13,7 +13,9 @@ import java.util.List;
 
 public class SourceDialog extends JFrame {
 
-    List<RSSSource> sources;
+    private List<RSSSource> sources;
+
+    public SourceDialog(){}
 
     public SourceDialog(List<RSSSource> sources, int index)  {
         this.sources = sources;
@@ -35,7 +37,7 @@ public class SourceDialog extends JFrame {
 
         JTextField nazevTF = new JTextField();
         p1.add(nazevTF,BorderLayout.SOUTH);
-        p1.setBorder(new CompoundBorder(p1.getBorder(),new EmptyBorder(10,0,0,0)));
+        p1.setBorder(new CompoundBorder(p1.getBorder(),new EmptyBorder(10,5,0,5)));
 
         JPanel p2 = new JPanel(new BorderLayout());
         JLabel linkLabel = new JLabel();
@@ -44,17 +46,28 @@ public class SourceDialog extends JFrame {
         JTextField linkTF = new JTextField();
         p2.add(linkLabel,BorderLayout.NORTH);
         p2.add(linkTF,BorderLayout.SOUTH);
-        p2.setBorder(new CompoundBorder(p2.getBorder(),new EmptyBorder(10,0,50,0)));
+        p2.setBorder(new CompoundBorder(p2.getBorder(),new EmptyBorder(10,5,50,5)));
 
         JPanel btnPanel = new JPanel(new BorderLayout());
-        JButton btnOK = new JButton("OK");
+        JButton btnOK = new JButton("   OK   ");
         JButton btnCancel = new JButton("Cancel");
         btnPanel.add(btnOK,BorderLayout.WEST);
         btnPanel.add(btnCancel,BorderLayout.EAST);
-        btnPanel.setBorder(new CompoundBorder(btnPanel.getBorder(),new EmptyBorder(20,0,10,0)));
+        btnPanel.setBorder(new CompoundBorder(btnPanel.getBorder(),new EmptyBorder(20,125,10,125)));
 
-        add(p1,BorderLayout.NORTH);
-        add(p2,BorderLayout.CENTER);
+        JLabel errorLabel = new JLabel();
+        errorLabel.setText("Zadávací pole nemůže být prázdné!");
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errorLabel.setVisible(false);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        mainPanel.add(p1,BorderLayout.NORTH);
+        mainPanel.add(p2,BorderLayout.CENTER);
+        mainPanel.add(errorLabel,BorderLayout.SOUTH);
+
+        add(mainPanel,BorderLayout.NORTH);
         add(btnPanel,BorderLayout.SOUTH);
 
         btnCancel.addActionListener(new ActionListener() {
@@ -78,6 +91,8 @@ public class SourceDialog extends JFrame {
                     }
                     FileUtils.saveSources(sources);
                     dispose();
+                }else{
+                    errorLabel.setVisible(true);
                 }
             }
         });

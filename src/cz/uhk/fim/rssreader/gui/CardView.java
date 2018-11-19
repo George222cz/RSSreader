@@ -16,11 +16,15 @@ public class CardView extends JPanel {
     private final String startHtml = "<html><p style='width: "+COMPONENT_WIDTH+" px'>";
     private final String endHtml = "</p></html>";
 
+    private Color textColor;
+
     public CardView(RSSItem item){
         setLayout(new WrapLayout());
         setSize(ITEM_WIDTH,HEIGHT);
+        Color bgnColor = getColor(item.getTitle());
+        setInverseTextColor(bgnColor);
+        setBackground(bgnColor);
         setTitle(item.getTitle());
-        setBackground(getColor(item.getTitle()));
         setDescription(item.getDescription());
         setAdditionalInfo(String.format("%s - %s",item.getAuthor(),item.getPubDate()));
         addMouseListener(new MouseAdapter() {
@@ -38,14 +42,16 @@ public class CardView extends JPanel {
         titleLabel.setText(String.format("%s%s%s",startHtml,title,endHtml));
         titleLabel.setSize(COMPONENT_WIDTH,HEIGHT);
         titleLabel.setFont(new Font("Courier", Font.BOLD,12));
+        titleLabel.setForeground(textColor);
         add(titleLabel);
     }
 
     private void setDescription(String description) {
         JLabel descLabel = new JLabel();
-        descLabel.setText(String.format("%s%s%s",startHtml,description,endHtml));
+        descLabel.setText(String.format("%s%s%s",startHtml,String.format("%s...", trimText(description)),endHtml));
         descLabel.setSize(COMPONENT_WIDTH,HEIGHT);
         descLabel.setFont(new Font("Courier", Font.PLAIN,11));
+        descLabel.setForeground(textColor);
         add(descLabel);
     }
 
@@ -63,6 +69,14 @@ public class CardView extends JPanel {
         String s2 = title.substring(title.length()/3,2*(title.length()/3));
         String s3 = title.substring(2*(title.length()/3));
         return new Color(Math.abs(s1.hashCode()%255), Math.abs(s2.hashCode()%255),Math.abs(s3.hashCode()%255));
+    }
+
+    private String trimText(String text) {
+        return text.length() >= 90 ? text.substring(0, 90) : text.substring(0, text.length() / 2);
+    }
+
+    private void setInverseTextColor(Color bgColor) {
+        textColor = new Color(255 - bgColor.getRed(), 255 - bgColor.getGreen(), 255 - bgColor.getBlue());
     }
 
 }
