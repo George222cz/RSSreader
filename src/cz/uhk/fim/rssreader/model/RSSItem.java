@@ -7,6 +7,7 @@ public class RSSItem {
     private String description;
     private String pubDate;
     private String author;
+    private boolean fav;
 
     public RSSItem() {
     }
@@ -49,5 +50,13 @@ public class RSSItem {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public boolean isFav() {
+        return fav;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
     }
 }

@@ -1,13 +1,19 @@
 package cz.uhk.fim.rssreader.gui;
 
 import cz.uhk.fim.rssreader.model.RSSItem;
+import cz.uhk.fim.rssreader.utils.FileUtils;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class DetailFrame extends JFrame {
 
@@ -25,12 +31,12 @@ public class DetailFrame extends JFrame {
         setLocationRelativeTo(null);
         setUndecorated(true);
         setVisible(true);
-
+        setAlwaysOnTop(true);
         setTitle(item.getTitle());
         setDescription(item.getDescription());
         setLink(item.getLink());
         setAdditionalInfo(String.format("%s - %s",item.getAuthor(),item.getPubDate()));
-
+        setFavButton(item);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -74,5 +80,36 @@ public class DetailFrame extends JFrame {
         infoLabel.setFont(new Font("Courier", Font.BOLD,11));
         infoLabel.setForeground(Color.LIGHT_GRAY);
         add(infoLabel);
+    }
+
+    private void setFavButton(RSSItem item) {
+        JButton btnFav = new JButton();
+        if(item.isFav()){
+            btnFav.setText("Odstranit z oblíbených");
+        }else{
+            btnFav.setText("Přidat do oblíbených");
+        }
+        btnFav.setSize(COMPONENT_WIDTH,HEIGHT);
+        btnFav.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if(item.isFav()){
+                        FileUtils.deleteFavItem(item);
+                        btnFav.setText("Přidat do oblíbených");
+                    }else{
+                        FileUtils.saveFavItem(item);
+                        btnFav.setText("Odstranit z oblíbených");
+                    }
+                } catch (ParserConfigurationException e1) {
+                    e1.printStackTrace();
+                } catch (SAXException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        add(btnFav);
     }
 }

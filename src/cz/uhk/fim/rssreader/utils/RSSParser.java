@@ -1,5 +1,6 @@
 package cz.uhk.fim.rssreader.utils;
 
+import cz.uhk.fim.rssreader.model.RSSItem;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -25,13 +26,35 @@ public class RSSParser {
 
         if(source.contains("http")) {
             parser.parse(new InputSource(new URL(source).openStream()), itemHandler);
-        }else {
+        } else if (source.equals(FileUtils.FAV_FILE)){
+            parser.parse(new File(source),itemHandler);
+        } else {
             parser.parse(new File(source),itemHandler);
         }
     }
 
     public RSSList getParsedRSS(String source) throws IOException, SAXException, ParserConfigurationException {
         parse(source);
+        if(!source.equals(FileUtils.FAV_FILE)) {
+            try {
+                RSSList rssItems = new RSSParser().getParsedRSS(FileUtils.FAV_FILE);
+                for (int i = 0; i < rssList.getAllItems().size(); i++){
+                    int finalI = i;
+                    boolean isFav = rssItems.getAllItems().stream().map(RSSItem::getTitle).anyMatch(item -> item.equals(rssList.getItem(finalI).getTitle()));
+                    rssList.getItem(i).setFav(isFav);
+                }
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            for (RSSItem item : rssList.getAllItems()){
+                item.setFav(true);
+            }
+        }
         return rssList;
     }
 }

@@ -21,6 +21,7 @@ public class MainFrame extends JFrame {
     private static final String VALIDATION_TYPE = "VALIDATION_TYPE";
     private static final String IO_LOAD_TYPE = "IO_LOAD_TYPE";
     private static final String IO_SAVE_TYPE = "IO_SAVE_TYPE";
+    public static final String FAV_LOAD = "FAV_LOAD";
 
     private JLabel lblErrorMessage;
     private List<RSSSource> sources;
@@ -77,7 +78,9 @@ public class MainFrame extends JFrame {
         combo.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                int index = combo.getSelectedIndex();
                 combo.setModel(new DefaultComboBoxModel(sources.stream().map(RSSSource::getName).toArray()));
+                combo.setSelectedIndex(index);
             }
 
             @Override
@@ -101,8 +104,27 @@ public class MainFrame extends JFrame {
                     content.repaint();
                     lblErrorMessage.setVisible(false);
                 } catch (IOException | ParserConfigurationException | SAXException e1) {
-                    showErrorMessage(IO_LOAD_TYPE);
-                    e1.printStackTrace();
+                    if(combo.getSelectedIndex()==0){
+                        showErrorMessage(FAV_LOAD);
+                    }else{
+                        showErrorMessage(IO_LOAD_TYPE);
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                if(combo.getSelectedIndex()==0){
+                    content.removeAll();
+                    for (RSSItem item : rssList.getAllItems()) {
+                        if(item.isFav())
+                        content.add(new CardView(item));
+                    }
+                    content.revalidate();
+                    content.repaint();
                 }
             }
         });
@@ -110,32 +132,37 @@ public class MainFrame extends JFrame {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!sourceDialog.isVisible()){ sourceDialog = new SourceDialog(sources, -1);}
+                if (!sourceDialog.isVisible()) {
+                    sourceDialog = new SourceDialog(sources, -1);
+                }
             }
         });
 
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!sourceDialog.isVisible()){ sourceDialog = new SourceDialog(sources,combo.getSelectedIndex());}
+                if (!sourceDialog.isVisible() && combo.getSelectedIndex()!=0){ sourceDialog = new SourceDialog(sources,combo.getSelectedIndex());}
             }
         });
 
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sources.remove(combo.getSelectedIndex());
-                FileUtils.saveSources(sources);
-                combo.setSelectedIndex(0);
+                if(combo.getSelectedIndex()!=0) {
+                    sources.remove(combo.getSelectedIndex());
+                    FileUtils.saveSources(sources);
+                    combo.setSelectedIndex(sources.size()-1);
+                }
             }
         });
 
         try {
-            if(sources.size()>0) {
-                rssList = new RSSParser().getParsedRSS(sources.get(0).getSource());
+            if(sources.size()>1) {
+                rssList = new RSSParser().getParsedRSS(sources.get(1).getSource());
                 for (RSSItem item : rssList.getAllItems()) {
                     content.add(new CardView(item));
                 }
+                combo.setSelectedIndex(1);
             }
         } catch (IOException | SAXException | ParserConfigurationException e1) {
             showErrorMessage(IO_LOAD_TYPE);
@@ -156,6 +183,9 @@ public class MainFrame extends JFrame {
                 break;
             case IO_SAVE_TYPE:
                 message = "Chyba při ukládání souboru!";
+                break;
+            case FAV_LOAD:
+                message = "Nemáte žádné oblíbené.";
                 break;
             default:
                 message = "Bůh ví, co se stalo";

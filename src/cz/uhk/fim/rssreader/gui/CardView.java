@@ -1,11 +1,17 @@
 package cz.uhk.fim.rssreader.gui;
 
 import cz.uhk.fim.rssreader.model.RSSItem;
+import cz.uhk.fim.rssreader.utils.FileUtils;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class CardView extends JPanel {
 
@@ -27,6 +33,7 @@ public class CardView extends JPanel {
         setTitle(item.getTitle());
         setDescription(item.getDescription());
         setAdditionalInfo(String.format("%s - %s",item.getAuthor(),item.getPubDate()));
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -35,6 +42,7 @@ public class CardView extends JPanel {
                 }
             }
         });
+
     }
 
     private void setTitle(String title) {
