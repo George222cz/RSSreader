@@ -43,11 +43,7 @@ public class RSSParser {
                     boolean isFav = rssItems.getAllItems().stream().map(RSSItem::getTitle).anyMatch(item -> item.equals(rssList.getItem(finalI).getTitle()));
                     rssList.getItem(i).setFav(isFav);
                 }
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }
         }else{

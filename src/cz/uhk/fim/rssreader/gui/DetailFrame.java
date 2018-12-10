@@ -101,11 +101,7 @@ public class DetailFrame extends JFrame {
                         FileUtils.saveFavItem(item);
                         btnFav.setText("Odstranit z oblíbených");
                     }
-                } catch (ParserConfigurationException e1) {
-                    e1.printStackTrace();
-                } catch (SAXException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
+                } catch (ParserConfigurationException | SAXException | IOException e1) {
                     e1.printStackTrace();
                 }
             }

@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
     private static final String VALIDATION_TYPE = "VALIDATION_TYPE";
     private static final String IO_LOAD_TYPE = "IO_LOAD_TYPE";
     private static final String IO_SAVE_TYPE = "IO_SAVE_TYPE";
-    public static final String FAV_LOAD = "FAV_LOAD";
+    private static final String FAV_LOAD = "FAV_LOAD";
 
     private JLabel lblErrorMessage;
     private List<RSSSource> sources;
