@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oblíbené</title>
+    <link>
+    </link>
+    <description>
+    </description>
+    <language>
+    </language>
+    <pubDate>
+    </pubDate>
+    <item>
+      <title>Google sleduje uživatele i v anonymním okně, tvrdí konkurenční DuckDuckGo. Google se brání</title>
+      <link>https://www.zive.cz/clanky/google-sleduje-uzivatele-i-v-anonymnim-okne-tvrdi-konkurencni-duckduckgo-google-se-brani/sc-3-a-196236/default.aspx</link>
+      <description>Přizpůsobování výsledků vyhledávání na Googlu na základě toho, zda jste či nejste přihlášení, je známá věc. Vyhledávač poté přizpůsobí výsledky vyhledávání na základě předchozích hledání a dalších dostupných dat. Nyní ale přišel vyhledávač DuckDuckGo s tím, že Google personalizuje výsledky i bez ...</description>
+      <pubDate>Thu, 6 Dec 2018 14:00:00 GMT</pubDate>
+      <dc:creator>Vladislav Kluska</dc:creator>
+    </item>
+    <item>
+      <title>Vždycky to jde ještě levněji. Jak dokážou nabídnout stejný mobil za ještě nižší cenu?</title>
+      <link>https://www.zive.cz/clanky/vzdycky-to-jde-jeste-levneji-jak-dokazou-nabidnout-stejny-mobil-za-jeste-nizsi-cenu/sc-3-a-195485/default.aspx</link>
+      <description>Titulky plní ceny iPhonů, které s každou generací šplhají do nových výšin, ale ve světě smartphonů lze vysledovat i docela opačný trend – zlevňování. Není tak moc vidět, protože nejde o snižování nejlevnějšího dostupného chytrého telefonu. Tenhle souboj se děje ve střední třídě a jd eo to, že ...</description>
+      <pubDate>Sun, 14 Oct 2018 14:00:00 GMT</pubDate>
+      <dc:creator>Filip Kůžel, Jan Láska</dc:creator>
+    </item>
+    <item>
+      <title>Google Cloud Next: Blíží se bitva o to, kdo ovládne cloud, tedy internet zítřka</title>
+      <link>https://connect.zive.cz/clanky/google-cloud-next-blizi-se-bitva-o-to-kdo-ovladne-cloud-tedy-internet-zitrka/sc-320-a-195460/default.aspx</link>
+      <description>Google v týdnu ukázal nové telefony Pixel • V Londýně se ale také konal Google Cloud Next • Konference o tom, jak bude vypadat internet v cloudu zítra</description>
+      <pubDate>Sun, 14 Oct 2018 17:00:00 GMT</pubDate>
+      <dc:creator>Jakub Čížek</dc:creator>
+    </item>
+    <item>
+      <title>Až budou auta řídit sama, změní se provoz na křižovatkách. Ford ukázal, jak děsivě se auta budou míjet</title>
+      <link>https://vtm.zive.cz/clanky/az-budou-auta-ridit-sama-zmeni-se-provoz-na-krizovatkach-ford-ukazal-jak-desive-se-auta-budou-mijet/sc-870-a-195459/default.aspx</link>
+      <description>Pro počítač je to možná jen přesně vypočítaná dráha dvou aut s malou mezerou pro odchylku radarů, ale pro lidské oči je takto těsné minutí dvou aut v křižovatce do poslední chvíle děsivé. Takové pocity vzbuzuje video od Fordu, který na polygonu v Milton Keynes testuje autonomní systém se vzájemnou ...</description>
+      <pubDate>Sun, 14 Oct 2018 10:00:00 GMT</pubDate>
+      <dc:creator>Milan Lažanský</dc:creator>
+    </item>
+  </channel>
+</rss>
